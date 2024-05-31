@@ -22,7 +22,7 @@ class EtsyFeedController extends Controller
                     $xml->text(now()->format('Y-m-d H:i'));
                 $xml->endElement();
 
-                foreach($feed->items()->where('state', ListingStateEnum::active) as $item) {
+                foreach($feed->items()->where('state', ListingStateEnum::active)->get() as $item) {
                     $xml->startElement('item');
                         $this->addXmlElement($xml, 'g:id', $item->listing_id);
                         $this->addXmlElement($xml, 'title', substr($item->title, 0,149) );
