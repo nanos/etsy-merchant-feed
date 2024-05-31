@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\EtsyService;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class EtsyController extends Controller
 {
+    /**
+     * @throws RequestException
+     * @throws ConnectionException
+     */
     public function callback(Request $request)
     {
         $state = Session::get('etsy-state');
