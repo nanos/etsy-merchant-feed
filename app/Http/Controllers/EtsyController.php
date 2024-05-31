@@ -45,6 +45,7 @@ class EtsyController extends Controller
             'shop_id' => $shop->shop_id,
             'shop_name' => $shop->shop_name,
             'auth_token' => $token,
+            'token_expires_at' => now()->addSeconds($token['expires_in']),
         ]);
         Session::remove('etsy-state');
         Session::remove('etsy-code-verifier');

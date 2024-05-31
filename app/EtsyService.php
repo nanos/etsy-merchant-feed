@@ -52,6 +52,9 @@ readonly class EtsyService
         Feed $feed
     ): Collection
     {
+        if($feed->token_expires_at->isBefore(now()->addMinutes(5))) {
+            $this->refreshToken($feed);
+        }
         $listings = collect();
         $offset = 0;
 
@@ -122,5 +125,27 @@ readonly class EtsyService
             ->get($this->baseUrl . 'application/' . $endpoint, $query)
             ->throw()
             ->json();
+    }
+
+    /**
+     * @throws RequestException
+     */
+    private function refreshToken(Feed $feed): void
+    {
+        $token = Http::post(
+            'https://api.etsy.com/v3/public/oauth/token',
+            [
+                'grant_type' => 'refresh_token',
+                'client_id' => $this->keyString,
+                'refresh_token' => $feed->auth_token['refresh_token'],
+            ]
+        )
+            ->throw()
+            ->json();
+
+        $feed->update([
+            'auth_token' => $token,
+            'token_expires_at' => now()->addSeconds($token['expires_in']),
+        ]);
     }
 }

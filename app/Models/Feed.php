@@ -17,6 +17,7 @@ class Feed extends Model
             'user_id' => 'integer',
             'status' => 'integer',
             'last_update' => 'datetime',
+            'token_expires_at' => 'datetime',
         ];
     }
 
