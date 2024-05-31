@@ -14,12 +14,13 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Livewire\Component;
+use Masmerise\Toaster\Toaster;
 
 class ListFeeds extends Component
 {
     /** @var Collection<Feed> */
     public Collection $feeds;
-    
+
     public function connect(EtsyService $etsyService): \Illuminate\Foundation\Application|Redirector|Application|RedirectResponse
     {
         Session::put('etsy-state', $state = Str::random(40));
@@ -33,6 +34,7 @@ class ListFeeds extends Component
             $feed->update([
                 'last_update' => null,
             ]);
+            Toaster::success('Update Scheduled');
         }
         $this->feeds = Auth::user()->feeds;
     }
@@ -41,6 +43,7 @@ class ListFeeds extends Component
     {
         if($feed->user_id === Auth::id()) {
             $feed->delete();
+            Toaster::success('Feed Deleted');
         }
         $this->feeds = Auth::user()->feeds;
     }

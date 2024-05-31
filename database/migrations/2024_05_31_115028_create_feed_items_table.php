@@ -11,7 +11,7 @@ return new class extends Migration {
         Schema::create('feed_items', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->foreignId('feed_id');
+            $table->foreignId('feed_id')->constrained()->cascadeOnDelete();
             $table->bigInteger('listing_id');
             $table->text('title');
             $table->longText('description');

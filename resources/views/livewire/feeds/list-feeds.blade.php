@@ -32,8 +32,14 @@
                         {{ $feed->items_count }}
                     </td>
                     <td>
-                        <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-bold py-2 px-4 rounded border border-blue-500 hover:border-transparent"
-                                wire:click="updateFeed({{ $feed }})">Schedule Update
+                        <button class="bg-transparent font-bold py-2 px-4 rounded border @if($feed->last_update === null) text-blue-200 border-blue-100 @else text-blue-700 border-blue-500 hover:bg-blue-500 hover:border-transparent @endif"
+                                @if($feed->last_update === null) disabled @endif
+                                wire:click="updateFeed({{ $feed }})">
+                            @if($feed->last_update === null)
+                                Update Scheduled
+                            @else
+                                Schedule Update
+                            @endif
                         </button>
                         <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                                 wire:confirm="Are you sure you want to delete this feed?"
