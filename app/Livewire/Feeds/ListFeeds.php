@@ -19,12 +19,22 @@ class ListFeeds extends Component
 {
     /** @var Collection<Feed> */
     public Collection $feeds;
-
-    public function connect(): \Illuminate\Foundation\Application|Redirector|Application|RedirectResponse
+    
+    public function connect(EtsyService $etsyService): \Illuminate\Foundation\Application|Redirector|Application|RedirectResponse
     {
         Session::put('etsy-state', $state = Str::random(40));
         Session::put('etsy-code-verifier', $codeVerifier = Str::random(128));
-        return redirect(app(EtsyService::class)->getConnectUrl($state, $codeVerifier), 302);
+        return redirect($etsyService->getConnectUrl($state, $codeVerifier), 302);
+    }
+
+    public function updateFeed(Feed $feed): void
+    {
+        if($feed->user_id === Auth::id()) {
+            $feed->update([
+                'last_update' => null,
+            ]);
+        }
+        $this->feeds = Auth::user()->feeds;
     }
 
     public function deleteFeed(Feed $feed): void

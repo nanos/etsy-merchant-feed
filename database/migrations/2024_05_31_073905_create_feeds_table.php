@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->integer('shop_id');
             $table->string('shop_name');
             $table->json('auth_token');
+            $table->dateTime('last_update')->nullable();
             $table->timestamps();
         });
     }

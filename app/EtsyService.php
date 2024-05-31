@@ -2,9 +2,12 @@
 
 namespace App;
 
+use App\Dto\EtsyListingDto;
 use App\Dto\EtsyShopDto;
+use App\Models\Feed;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 readonly class EtsyService
@@ -37,6 +40,34 @@ readonly class EtsyService
         )
             ->throw()
             ->json();
+    }
+
+    /**
+     * @param Feed $feed
+     * @return Collection<EtsyListingDto>
+     * @throws ConnectionException
+     * @throws RequestException
+     */
+    public function listings(
+        Feed $feed
+    ): Collection
+    {
+        $listings = collect();
+        $offset = 0;
+
+        while(!isset($result) || count($result['results']) > 0) {
+            $result = $this->get('shops/' . $feed->shop_id .'/listings', $feed->auth_token, [
+                'offset' => $offset,
+                'limit' => 100,
+                'includes' => ['Images'],
+            ]);
+            foreach($result['results'] as $listing) {
+                $listings->add(EtsyListingDto::make($listing));
+            }
+            $offset+= count($result['results']);
+        }
+
+        return $listings;
     }
 
     /**
