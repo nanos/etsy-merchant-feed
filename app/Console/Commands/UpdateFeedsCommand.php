@@ -59,6 +59,10 @@ class UpdateFeedsCommand extends Command
             'price' => $listingDto->price,
         ]));
 
+        $feed->items()
+            ->whereNotIn('listing_id', $listings->map(fn(EtsyListingDto $item) => $item->listing_id)->toArray())
+            ->delete();
+
         $feed->update([
             'last_update' => now(),
         ]);
