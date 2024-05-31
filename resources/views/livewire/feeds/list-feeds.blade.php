@@ -15,6 +15,9 @@
                     Shop
                 </th>
                 <th>
+                    Feed Url
+                </th>
+                <th>
                     Items in feed.
                 </th>
                 <th></th>
@@ -22,16 +25,19 @@
 
             @foreach($feeds as $feed)
                 <tr wire:key="{{ $feed->id }}">
-                    <td>
+                    <td class="px-2">
                         {{ $feed->id }}
                     </td>
-                    <td>
+                    <td class="px-2">
                         {{ $feed->shop_name }}
                     </td>
-                    <td>
+                    <td class="px-2">
+                        <a href="{{ route('etsy.feed', ['feed' => $feed]) }}" target="_blank" class="font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline">View Feed</a>
+                    </td>
+                    <td class="px-2">
                         {{ $feed->items_count }}
                     </td>
-                    <td>
+                    <td class="px-2">
                         <button class="bg-transparent font-bold py-2 px-4 rounded border @if($feed->last_update === null) text-blue-200 border-blue-100 @else text-blue-700 border-blue-500 hover:bg-blue-500 hover:border-transparent @endif"
                                 @if($feed->last_update === null) disabled @endif
                                 wire:click="updateFeed({{ $feed }})">

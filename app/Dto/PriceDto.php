@@ -11,4 +11,9 @@ readonly class PriceDto
     )
     {
     }
+
+    public function __toString(): string
+    {
+        return $this->currency_code . ' ' .round($this->amount / $this->divisor, 2);
+    }
 }
