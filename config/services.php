@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'etsy' => [
+        'keyString' => env('ETSY_KEYSTRING', ''),
+        'sharedSecret' => env('ETSY_SHARED_SECRET', ''),
+        'url' => 'https://api.etsy.com/v3/',
+    ]
 ];

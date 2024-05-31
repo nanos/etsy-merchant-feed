@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\EtsyService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -12,7 +13,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(EtsyService::class, function ($app) {
+            return new EtsyService(
+                config('services.etsy.keyString'),
+                config('services.etsy.sharedSecret'),
+                config('services.etsy.url'),
+            );
+        });
     }
 
     /**
