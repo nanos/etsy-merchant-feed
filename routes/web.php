@@ -4,8 +4,9 @@ use App\Http\Controllers\EtsyController;
 use App\Http\Controllers\EtsyFeedController;
 use App\Http\Controllers\EtsyRedirectController;
 use Illuminate\Support\Facades\Route;
+use Livewire\Volt\Volt;
 
-Route::view('/', 'welcome');
+Volt::route('/', 'pages.auth.login');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
