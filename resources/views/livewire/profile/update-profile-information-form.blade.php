@@ -1,15 +1,16 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Livewire\Volt\Component;
 
-new class extends Component
-{
+new class extends Component {
     public string $name = '';
     public string $email = '';
+    public string $timezone = '';
 
     /**
      * Mount the component.
@@ -18,6 +19,7 @@ new class extends Component
     {
         $this->name = Auth::user()->name;
         $this->email = Auth::user()->email;
+        $this->timezone = Auth::user()->timezone;
     }
 
     /**
@@ -29,6 +31,7 @@ new class extends Component
 
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
+            'timezone' => ['required', 'string', Rule::in(timezone_identifiers_list())],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
         ]);
 
@@ -102,6 +105,11 @@ new class extends Component
                     @endif
                 </div>
             @endif
+        </div>
+        <div>
+            <x-input-label for="timezone" :value="__('Timezone')"/>
+            <x-select-input wire:model="timezone" id="email" required name="timezone" :options="timezone_identifiers_list()" class="mt-1 block w-full"/>
+             <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
         </div>
 
         <div class="flex items-center gap-4">
