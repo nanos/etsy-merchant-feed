@@ -17,8 +17,8 @@
     @else
         <div class="grid-cols-1 gap-4 grid">
             @foreach($feeds as $feed)
-                <div class="border border-gray-300 rounded p-4 my-2 grid-cols-5 gap-2 grid items-center">
-                    <div class="">
+                <div class="border border-gray-300 rounded p-4 my-2 grid-cols-2 gap-2 grid items-center md:grid-cols-6">
+                    <div class="col-span-2 md:col-span-1 text-center md:text-left">
                         <strong>{{ $feed->shop_name }}</strong>
                         <div class="text-gray-400">Store</div>
                     </div>
@@ -45,6 +45,9 @@
                         <div class="text-gray-400">Items</div>
                     </div>
                     <div class="text-center">
+                        <strong><a href="{{ route('etsy.feed', ['feed' => $feed]) }}" target="_blank" class="text-blue-500 underline">View Feed</a></strong>
+                    </div>
+                    <div class="text-center col-span-2 md:col-span-1">
                         <button class="block w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                                 wire:confirm="Are you sure you want to delete this feed?"
                                 wire:click="deleteFeed({{ $feed }})">Delete Feed
