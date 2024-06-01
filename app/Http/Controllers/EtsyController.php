@@ -40,7 +40,10 @@ class EtsyController extends Controller
             return redirect(route('dashboard'));
         }
         $token = $this->etsyService->getAccessToken($request->input('code'), $codeVerifier);
-        $shop = $this->etsyService->getShop($token);
+        $shop = $this->etsyService
+            ->authenticate($token)
+            ->setShopId(explode('.',$token['access_token'])[0])
+            ->getShop();
         Auth::user()->feeds()->create([
             'shop_id' => $shop->shop_id,
             'shop_name' => $shop->shop_name,

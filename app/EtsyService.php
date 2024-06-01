@@ -12,12 +12,40 @@ use Illuminate\Support\Facades\Http;
 
 readonly class EtsyService
 {
+    private array $token;
+    private int $shopId;
+
     public function __construct(
         private string $keyString,
         private string $secret,
         private string $baseUrl,
     )
     {
+    }
+
+    /**
+     * @throws RequestException
+     */
+    public function authenticateWithFeed(Feed $feed): self
+    {
+        if($feed->token_expires_at->isBefore(now()->addMinutes(5))) {
+            $this->refreshToken($feed);
+        }
+        return $this
+            ->authenticate($feed->auth_token)
+            ->setShopId($feed->shop_id);
+    }
+
+    public function authenticate(array $auth_token): self
+    {
+        $this->token = $auth_token;
+        return $this;
+    }
+
+    public function setShopId(int $shopId): self
+    {
+        $this->shopId = $shopId;
+        return $this;
     }
 
     /**
@@ -43,23 +71,17 @@ readonly class EtsyService
     }
 
     /**
-     * @param Feed $feed
      * @return Collection<EtsyListingDto>
      * @throws ConnectionException
      * @throws RequestException
      */
-    public function listings(
-        Feed $feed
-    ): Collection
+    public function listings(): Collection
     {
-        if($feed->token_expires_at->isBefore(now()->addMinutes(5))) {
-            $this->refreshToken($feed);
-        }
         $listings = collect();
         $offset = 0;
 
         while(!isset($result) || count($result['results']) > 0) {
-            $result = $this->get('shops/' . $feed->shop_id .'/listings', $feed->auth_token, [
+            $result = $this->get('shops/' . $this->shopId .'/listings', [
                 'offset' => $offset,
                 'limit' => 100,
                 'includes' => ['Images'],
@@ -77,9 +99,9 @@ readonly class EtsyService
      * @throws RequestException
      * @throws ConnectionException
      */
-    public function getShop(array $token): EtsyShopDto
+    public function getShop(): EtsyShopDto
     {
-        $response = $this->get('users/' . explode('.',$token['access_token'])[0] .'/shops', $token);
+        $response = $this->get('users/' . $this->shopId .'/shops');
         return new EtsyShopDto(
             $response['shop_id'],
             $response['shop_name'],
@@ -113,14 +135,13 @@ readonly class EtsyService
      */
     private function get(
         string $endpoint,
-        array $token,
         array $query = [],
     ): array
     {
         return Http
             ::withHeaders([
                 'x-api-key' => $this->keyString,
-                'Authorization' => 'Bearer ' . $token['access_token'],
+                'Authorization' => 'Bearer ' . $this->token['access_token'],
             ])
             ->get($this->baseUrl . 'application/' . $endpoint, $query)
             ->throw()
@@ -130,7 +151,7 @@ readonly class EtsyService
     /**
      * @throws RequestException
      */
-    private function refreshToken(Feed $feed): void
+    private function refreshToken(Feed $feed): self
     {
         $token = Http::post(
             'https://api.etsy.com/v3/public/oauth/token',
@@ -147,5 +168,7 @@ readonly class EtsyService
             'auth_token' => $token,
             'token_expires_at' => now()->addSeconds($token['expires_in']),
         ]);
+
+        return $this;
     }
 }

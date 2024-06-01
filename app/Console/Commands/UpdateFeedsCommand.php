@@ -40,7 +40,9 @@ class UpdateFeedsCommand extends Command
      */
     private function updateFeed(Feed $feed): void
     {
-        $listings = $this->etsyService->listings($feed);
+        $listings = $this->etsyService
+            ->authenticateWithFeed($feed)
+            ->listings();
 
         $listings->each(fn(EtsyListingDto $listingDto)  => FeedItem::updateOrCreate([
             'feed_id' => $feed->id,
