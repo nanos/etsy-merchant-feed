@@ -30,21 +30,11 @@ class ListFeeds extends Component
 
     public function updateFeed(Feed $feed): void
     {
-        if($feed->user_id === Auth::id()) {
-            $feed->update([
-                'last_update' => null,
-            ]);
-            Toaster::success('Update Scheduled');
-        }
-        $this->feeds = Auth::user()->feeds;
-    }
-
-    public function deleteFeed(Feed $feed): void
-    {
-        if($feed->user_id === Auth::id()) {
-            $feed->delete();
-            Toaster::success('Feed Deleted');
-        }
+        $this->authorize('update', $feed);
+        $feed->update([
+            'last_update' => null,
+        ]);
+        Toaster::success('Update Scheduled');
         $this->feeds = Auth::user()->feeds;
     }
 

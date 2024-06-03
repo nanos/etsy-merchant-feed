@@ -47,10 +47,9 @@
                         <strong><a href="{{ route('etsy.feed', ['feed' => $feed]) }}" target="_blank" class="text-blue-500 underline">View Feed</a></strong>
                     </div>
                     <div class="text-center col-span-2 md:col-span-1">
-                        <button class="block w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                                wire:confirm="Are you sure you want to disconnect this store?"
-                                wire:click="deleteFeed({{ $feed }})">Disconnect
-                        </button>
+                        <a href="{{ route('store', ['feed' => $feed]) }}" class="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                wire:navigate>Edit
+                        </a>
                     </div>
                 </div>
             @endforeach

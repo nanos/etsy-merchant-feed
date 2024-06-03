@@ -44,7 +44,7 @@ class EtsyController extends Controller
             ->authenticate($token)
             ->setShopId(explode('.',$token['access_token'])[0])
             ->getShop();
-        Auth::user()->feeds()->create([
+        $feed = Auth::user()->feeds()->create([
             'shop_id' => $shop->shop_id,
             'shop_name' => $shop->shop_name,
             'auth_token' => $token,
@@ -53,7 +53,7 @@ class EtsyController extends Controller
         Session::remove('etsy-state');
         Session::remove('etsy-code-verifier');
         Toaster::success('Your feed has been succesfully connected, and will be updated shortly.');
-        return  redirect()->route('dashboard');
+        return  redirect()->route('store', ['feed' => $feed]);
     }
     public function view(Feed $feed)
     {
