@@ -8,7 +8,7 @@ enum UpdateFrequencyEnum: int
     case QUARTER_HOUR = 900;
     case THIRTY_MINUTES = 1800;
     case HOURLY = 3600;
-    case TWICE_DAILY = 7200;
+    case TWICE_DAILY = 43200;
     case DAILY = 86400;
     case WEEKLY = 604800;
     case MONTHLY = 2419200;
