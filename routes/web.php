@@ -3,6 +3,7 @@
 use App\Http\Controllers\EtsyController;
 use App\Http\Controllers\EtsyFeedController;
 use App\Http\Controllers\EtsyRedirectController;
+use App\Http\Controllers\FeedItemRedirectController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\StoreController;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,12 @@ Route::get('etsy/callback', [EtsyController::class, 'callback'])
 Route::get('etsy/feed/{feed}', EtsyFeedController::class)
     ->name('etsy.feed');
 
+Route::get('etsy/feed/{feed}/{listingId}', FeedItemRedirectController::class)
+    ->name('etsy.feed.redirect');
+
+//legacy and should be removed
 Route::get('feed_item/{feedItem}', EtsyRedirectController::class)
     ->name('feed_item.redirect');
+
 
 require __DIR__.'/auth.php';

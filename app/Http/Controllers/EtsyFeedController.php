@@ -34,7 +34,10 @@ class EtsyFeedController extends Controller
                                 $this->addXmlElement($xml, 'g:additional_image_link', $image['url_fullxfull']);
                             }
                         }
-                        $this->addXmlElement($xml, 'g:link', route('feed_item.redirect', ['feedItem' => $item]) );
+                        $this->addXmlElement($xml, 'g:link', route('etsy.feed.redirect', [
+                            'feed' => $feed,
+                            'listingId' => $item->listing_id,
+                        ]) );
                         $this->addXmlElement($xml, 'g:condition', 'new');
                         $this->addXmlElement($xml, 'g:brand', $feed->brand_name);
                         $this->addXmlElement($xml, 'g:price', $item->price);
