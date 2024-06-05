@@ -6,6 +6,9 @@ class RedirectController extends Controller
 {
     public function __invoke()
     {
-        return redirect('https://mylittlechaletshop.etsy.com/');
+        if(config('services.etsy.redirect_url')) {
+            return redirect(config('services.etsy.redirect_url'));
+        }
+        return redirect(route('dashboard'));
     }
 }
