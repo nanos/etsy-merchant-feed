@@ -29,7 +29,6 @@ class EditFeed extends Component
         $this->form->update();
 
         Toaster::success('Store updated');
-        return $this->redirect(route('dashboard'));
     }
 
     public function render()
