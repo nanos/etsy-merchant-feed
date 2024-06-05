@@ -108,7 +108,11 @@ new class extends Component {
         </div>
         <div>
             <x-input-label for="timezone" :value="__('Timezone')"/>
-            <x-select-input wire:model="timezone" id="email" required name="timezone" :options="timezone_identifiers_list()" class="mt-1 block w-full"/>
+            <x-select-input wire:model="timezone" id="email" required name="timezone" class="mt-1 block w-full">
+                @foreach(timezone_identifiers_list() as $tz)
+                    <option>{{ $tz }}</option>
+                @endforeach
+            </x-select-input>
              <x-input-error class="mt-2" :messages="$errors->get('timezone')" />
         </div>
 

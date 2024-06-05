@@ -19,6 +19,8 @@ class Feed extends Model
             'status' => 'integer',
             'last_update' => 'datetime',
             'token_expires_at' => 'datetime',
+            'update_scheduled' => 'bool',
+            'update_frequency' => 'int',
         ];
     }
 
@@ -36,7 +38,8 @@ class Feed extends Model
     {
         return $query->where(fn(Builder $query) => $query
             ->whereNull('last_update')
-            ->orWhere('last_update', '<', now()->subDay())
+            ->orWhereRaw("datetime (last_update, '+' || update_frequency ||' seconds') < ?", [now()])
+            ->orWhere('update_scheduled', 1)
         );
     }
 

@@ -32,7 +32,7 @@ class ListFeeds extends Component
     {
         $this->authorize('update', $feed);
         $feed->update([
-            'last_update' => null,
+            'update_scheduled' => 1,
         ]);
         Toaster::success('Update Scheduled');
         $this->feeds = Auth::user()->feeds;

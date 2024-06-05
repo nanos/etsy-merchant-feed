@@ -29,6 +29,20 @@
             <x-input-error :messages="$errors->get('form.created_at')" class="mt-2" />
         </div>
 
+        <div>
+            <x-input-label for="update_frequency" :value="__('Update frequency')" />
+            <x-select-input type="text" id="update_frequency" class="block mt-1 w-full" name="update_frequency"
+                          wire:model="form.update_frequency">
+                @foreach(\App\UpdateFrequencyEnum::cases() as $case)
+                    <option value="{{ $case->value }}">{{ $case->label() }}</option>
+                @endforeach
+            </x-select-input>
+            <x-input-error :messages="$errors->get('form.update_frequency')" class="mt-2" />
+            <p>Determines how often we'll update the feed from the Etsy API. You can always update a feed manually outside of the schedule, if needed.</p>
+        </div>
+
+
+
 
         <div>
             <x-input-label for="feed_url" :value="__('Feed URL')" />

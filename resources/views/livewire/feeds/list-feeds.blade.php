@@ -26,11 +26,28 @@
                         <div class="text-gray-400">Date added</div>
                     </div>
                     <div class="text-center">
+                        <strong>{{ $feed->items_count }}</strong>
+                        <div class="text-gray-400">Items</div>
+                    </div>
+                    <div class="text-center">
                         <strong>{{ $feed->last_update?->timezone(\Illuminate\Support\Facades\Auth::user()->timezone)->format('d/m/y H:i') ?? 'Scheduled...' }}</strong>
 
                         <div class="text-gray-400">
                             Last Update
-                            @if($feed->last_update !== null)
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <strong>
+                            @if($feed->last_update === null || $feed->update_scheduled)
+                                Scheduled ...
+                            @else
+                                {{ $feed->last_update->addSeconds($feed->update_frequency)->diffForHumans(short: true) }}
+                            @endif
+                        </strong>
+
+                        <div class="text-gray-400">
+                            Next Update
+                            @if($feed->last_update !== null && !$feed->update_scheduled)
                                 <button class="inline bg-transparent font-bold py-2 px-4 rounded border text-blue-200 border-blue-100"
                                             title="Schedule Update"
                                             wire:click="updateFeed({{ $feed }})">
@@ -38,13 +55,6 @@
                                 </button>
                            @endif
                         </div>
-                    </div>
-                    <div class="text-center">
-                        <strong>{{ $feed->items_count }}</strong>
-                        <div class="text-gray-400">Items</div>
-                    </div>
-                    <div class="text-center">
-                        <strong><a href="{{ route('etsy.feed', ['feed' => $feed]) }}" target="_blank" class="text-blue-500 underline">View Feed</a></strong>
                     </div>
                     <div class="text-center col-span-2 md:col-span-1">
                         <a href="{{ route('store', ['feed' => $feed]) }}" class="block w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
