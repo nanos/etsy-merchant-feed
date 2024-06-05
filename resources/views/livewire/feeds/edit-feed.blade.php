@@ -23,13 +23,6 @@
         </div>
 
         <div>
-            <x-input-label for="created_at" :value="__('Connection date')" />
-            <x-text-input type="text"  id="created_at" class="block mt-1 w-full" name="created_at" readonly
-                          value="{{ $form->feed->created_at->timezone(\Illuminate\Support\Facades\Auth::user()->timezone)->format('d/m/y H:i') }}"/>
-            <x-input-error :messages="$errors->get('form.created_at')" class="mt-2" />
-        </div>
-
-        <div>
             <x-input-label for="update_frequency" :value="__('Update frequency')" />
             <x-select-input type="text" id="update_frequency" class="block mt-1 w-full" name="update_frequency"
                           wire:model="form.update_frequency">
@@ -41,13 +34,19 @@
             <p>Determines how often we'll update the feed from the Etsy API. You can always update a feed manually outside of the schedule, if needed.</p>
         </div>
 
-
-
+        <div>
+            <x-input-label for="utm_tags" :value="__('UTM Tags')" />
+            <x-text-input type="text"  id="utm_tags" class="block mt-1 w-full" name="utm_tags"
+                          wire:model="form.utm_tags"/>
+            <x-input-error :messages="$errors->get('form.utm_tags')" class="mt-2" />
+            <p>Optionally add your UTM tags here, as a simple string, e.g. <code>utm_source=instagram&utm_medium=cpc</code>.</p>
+        </div>
 
         <div>
             <x-input-label for="feed_url" :value="__('Feed URL')" />
-            <x-text-input type="text" value="{{ route('etsy.feed', ['feed' => $form->feed]) }}" id="feed_url" class="block mt-1 w-full" name="feed_url" readonly/>
+            <x-text-input type="text" value="{{ route('etsy.feed', ['feed' => $form->feed]) }}" id="feed_url" class="block mt-1 w-full" name="feed_url" readonly onclick="this.select()"/>
             <x-input-error :messages="$errors->get('form.feed_url')" class="mt-2" />
+            <p>This is the link to your Merchant Feed for this store.</p>
         </div>
 
 

@@ -9,6 +9,11 @@ class FeedItemRedirectController extends Controller
     public function __invoke(Feed $feed, string $listingId)
     {
         $feedItem = $feed->items()->where('listing_id', $listingId)->firstOrFail();
-        return redirect($feedItem->url);
+        $url = $feedItem->url;
+        if($feed->utm_tags) {
+            $url .= str_contains($url, '?') ? '&' : '?';
+            $url .= ltrim($feed->utm_tags, '?');
+        }
+        return redirect($url);
     }
 }
