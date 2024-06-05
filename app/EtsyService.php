@@ -27,10 +27,8 @@ readonly class EtsyService
      */
     public function authenticateWithFeed(Feed $feed): self
     {
-        if($feed->token_expires_at->isBefore(now()->addMinutes(5))) {
-            $this->refreshToken($feed);
-        }
         return $this
+            ->refreshToken($feed)
             ->authenticate($feed->auth_token)
             ->setShopId($feed->shop_id);
     }
@@ -152,21 +150,23 @@ readonly class EtsyService
      */
     private function refreshToken(Feed $feed): self
     {
-        $token = Http::post(
-            'https://api.etsy.com/v3/public/oauth/token',
-            [
-                'grant_type' => 'refresh_token',
-                'client_id' => $this->keyString,
-                'refresh_token' => $feed->auth_token['refresh_token'],
-            ]
-        )
-            ->throw()
-            ->json();
+        if($feed->token_expires_at->isBefore(now()->addMinutes(5))) {
+            $token = Http::post(
+                'https://api.etsy.com/v3/public/oauth/token',
+                [
+                    'grant_type' => 'refresh_token',
+                    'client_id' => $this->keyString,
+                    'refresh_token' => $feed->auth_token['refresh_token'],
+                ]
+            )
+                ->throw()
+                ->json();
 
-        $feed->update([
-            'auth_token' => $token,
-            'token_expires_at' => now()->addSeconds($token['expires_in']),
-        ]);
+            $feed->update([
+                'auth_token' => $token,
+                'token_expires_at' => now()->addSeconds($token['expires_in']),
+            ]);
+        }
 
         return $this;
     }
