@@ -8,7 +8,7 @@ readonly class EtsyShopDto
         public int $shop_id,
         public string $shop_name,
         public int $user_id,
-        public string $title,
+        public ?string $title,
         public string $currency_code,
         public string $url,
     )

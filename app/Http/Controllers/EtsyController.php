@@ -19,10 +19,6 @@ class EtsyController extends Controller
     {
     }
 
-    /**
-     * @throws RequestException
-     * @throws ConnectionException
-     */
     public function callback(Request $request)
     {
         $state = Session::get('etsy-state');
@@ -39,11 +35,21 @@ class EtsyController extends Controller
             Toaster::error('An error occurred. Please try again.');
             return redirect(route('dashboard'));
         }
-        $token = $this->etsyService->getAccessToken($request->input('code'), $codeVerifier);
-        $shop = $this->etsyService
-            ->authenticate($token)
-            ->setShopId(explode('.',$token['access_token'])[0])
-            ->getShop();
+        try {
+            $token = $this->etsyService->getAccessToken($request->input('code'), $codeVerifier);
+        } catch (RequestException $e) {
+            Toaster::error('An error occurred. Please try again.');
+            return redirect(route('dashboard'));
+        }
+        try {
+            $shop = $this->etsyService
+                ->authenticate($token)
+                ->setShopId(explode('.', $token['access_token'])[0])
+                ->getShop();
+        } catch (ConnectionException|RequestException $e) {
+            Toaster::error('An error occurred. Please try again.');
+            return redirect(route('dashboard'));
+        }
         $feed = Auth::user()->feeds()->create([
             'shop_id' => $shop->shop_id,
             'shop_name' => $shop->shop_name,
