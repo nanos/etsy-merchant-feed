@@ -67,6 +67,7 @@ class UpdateFeedsCommand extends Command
 
         $feed->update([
             'last_update' => now(),
+            'update_scheduled' => false,
         ]);
     }
 }

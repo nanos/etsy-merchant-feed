@@ -3,17 +3,16 @@
 namespace App\Livewire\Forms;
 
 use App\Models\Feed;
-use Livewire\Attributes\Validate;
+use App\UpdateFrequencyEnum;
+use Illuminate\Validation\Rule;
 use Livewire\Form;
 
 class FeedForm extends Form
 {
     public Feed $feed;
 
-    #[Validate('required')]
     public string $google_product_category = '';
-    #[Validate('required')]
-    public int $update_frequency;
+    public UpdateFrequencyEnum $update_frequency;
     public ?string $brand_name = null;
 
     public function setFeed(Feed $feed): void
@@ -26,12 +25,12 @@ class FeedForm extends Form
 
     public function update(): void
     {
-        $this->validate();
-
-        $this->feed->update($this->only([
-            'google_product_category',
-            'update_frequency',
-            'brand_name'
+        $this->feed->update($this->validate([
+            'google_product_category' => 'required',
+            'update_frequency' => [
+                'required',
+                Rule::enum(UpdateFrequencyEnum::class),
+            ],
         ]));
     }
 }

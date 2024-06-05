@@ -41,7 +41,7 @@
                             @if($feed->last_update === null || $feed->update_scheduled)
                                 Scheduled ...
                             @else
-                                {{ $feed->last_update->addSeconds($feed->update_frequency)->diffForHumans(short: true) }}
+                                {{ $feed->last_update->addSeconds($feed->update_frequency->value)->diffForHumans(short: true) }}
                             @endif
                         </strong>
 

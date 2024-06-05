@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\UpdateFrequencyEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +21,7 @@ class Feed extends Model
             'last_update' => 'datetime',
             'token_expires_at' => 'datetime',
             'update_scheduled' => 'bool',
-            'update_frequency' => 'int',
+            'update_frequency' => UpdateFrequencyEnum::class,
         ];
     }
 
