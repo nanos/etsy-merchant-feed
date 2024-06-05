@@ -17,7 +17,6 @@ readonly class EtsyService
 
     public function __construct(
         private string $keyString,
-        private string $secret,
         private string $baseUrl,
     )
     {

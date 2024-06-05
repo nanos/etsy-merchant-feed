@@ -16,7 +16,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(EtsyService::class, function ($app) {
             return new EtsyService(
                 config('services.etsy.keyString'),
-                config('services.etsy.sharedSecret'),
                 config('services.etsy.url'),
             );
         });
