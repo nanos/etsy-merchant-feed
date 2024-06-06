@@ -64,6 +64,10 @@ npm run build
 ```
 5. Run `php artisan user:register` to register a user.
 6. Open your application in the browser at `https://example.com/dashboard`. Log in and follow the prompts to connect to your Etsy store.
+7. Set up your cronjobs by runing `crontab -e` and adding the following line:
+```
+* * * * * cd /var/www/example.com && php artisan schedule:run >> /dev/null 2>&1
+```
 
 ### Nginx sample configuration
 
