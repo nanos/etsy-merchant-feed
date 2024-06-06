@@ -14,9 +14,11 @@ This is a very simple Laravel app to generate Google Merchant Data Feeds from an
 
 ### Limitations
 
- - You can only supply one Google Product Category for the entirety of your store. You cannot (yet) select categories per product.
+ - You can only supply one Google Product Category for the entirety of your feed. You cannot (yet) select categories per product.
  - Multi-store support is experimental.
- - The logo is ugly 😬
+ - It doesn't currently import shipping info. I'll try to build that into it.
+ - You need to be comfortable hosting a simple PHP app.
+ - The name is boring, and the logo is ugly 😬
 
 ## Pre-requisites
 
