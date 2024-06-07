@@ -43,10 +43,23 @@ class EtsyFeedController extends Controller
                         $this->addXmlElement($xml, 'g:price', $item->price);
                         $this->addXmlElement($xml, 'g:google_product_category', $feed->google_product_category);
 
-                        $xml->startElement('g:shipping');
-                            $this->addXmlElement($xml, 'g:country', 'GB');
-                            $this->addXmlElement($xml, 'g:price', '0 GBP');
-                        $xml->endElement();
+                        foreach($item->data->shipping_profile->shipping_profile_destinations as $shippingProfile) {
+                            $xml->startElement('g:shipping');
+                                $this->addXmlElement($xml, 'g:country', $shippingProfile->destination_country_iso);
+                                $this->addXmlElement($xml, 'g:price', (string) $shippingProfile->primary_cost);
+                                if($item->data->shipping_profile->hasProcessingDays()) {
+                                    $this->addXmlElement($xml, 'g:min_handling_time', $item->data->shipping_profile->min_processing_days);
+                                    $this->addXmlElement($xml, 'g:max_handling_time', $item->data->shipping_profile->max_processing_days);
+                                }
+                                if($shippingProfile->hasDeliveryDays()) {
+                                    $this->addXmlElement($xml, 'g:min_transit_time', $shippingProfile->min_delivery_days);
+                                    $this->addXmlElement($xml, 'g:max_transit_time', $shippingProfile->max_delivery_days);
+                                } elseif ($shippingProfile->isDomestic()) {
+                                    $this->addXmlElement($xml, 'g:min_transit_time', 1);
+                                    $this->addXmlElement($xml, 'g:max_transit_time', 5);
+                                }
+                            $xml->endElement();
+                        }
                     $xml->endElement();
                 }
 

@@ -42,6 +42,7 @@ readonly class EtsyListingDto
         public string $language,
         public PriceDto $price,
         public int $taxonomy_id,
+        public ShippingProfileDto $shipping_profile,
         public int $views = 0,
         public ?int $personalization_char_count_max = null,
         public ?string $personalization_instructions = null,
@@ -56,7 +57,6 @@ readonly class EtsyListingDto
         public ?array $materials = [],
         public ?array $style = [],
         public ?array $strings = [],
-        public ?array $shipping_profile = [],
         public ?array $user = [],
         public ?array $shop = [],
         public ?array $images = [],
@@ -65,6 +65,7 @@ readonly class EtsyListingDto
         public ?array $production_partners = [],
         public ?array $skus = [],
         public ?array $translations = [],
+        public ?array $shipping_profile_destinations = [],
 
     )
     {
@@ -76,6 +77,9 @@ readonly class EtsyListingDto
             $args['state'] = ListingStateEnum::from($args['state']);
         }
         $args['price'] = new PriceDto(...$args['price']);
+        if(isset($args['shipping_profile'])) {
+            $args['shipping_profile'] = ShippingProfileDto::make($args['shipping_profile']);
+        }
         return new self(... $args);
     }
 }

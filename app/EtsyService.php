@@ -81,7 +81,7 @@ readonly class EtsyService
             $result = $this->get('shops/' . $this->shopId .'/listings', [
                 'offset' => $offset,
                 'limit' => 100,
-                'includes' => ['Images'],
+                'includes' => ['Images', 'Shipping'],
             ]);
             foreach($result['results'] as $listing) {
                 $listings->add(EtsyListingDto::make($listing));
