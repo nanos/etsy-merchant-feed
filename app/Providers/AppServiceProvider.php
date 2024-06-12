@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\EtsyService;
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -31,6 +32,17 @@ class AppServiceProvider extends ServiceProvider
             ->letters()
             ->numbers()
             ->uncompromised()
+        );
+
+        Carbon::macro(
+            'toUserTimezone',
+            fn (): Carbon => $this->setTimezone(auth()->user()?->timezone ?? config('app.timezone')),
+        );
+
+        Carbon::macro(
+            'toDefaultDateTimeString',
+            fn (bool $inUserTimeZone = true): string => ($inUserTimeZone ? $this->toUserTimezone() : $this)
+                ->format('d/m/y H:i'),
         );
     }
 }

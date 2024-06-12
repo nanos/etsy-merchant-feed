@@ -22,7 +22,7 @@
                         <strong>{{ $feed->shop_name }}</strong>
                     </div>
                     <div class="text-center">
-                        <strong>{{ $feed->created_at->timezone(\Illuminate\Support\Facades\Auth::user()->timezone)->format('d/m/y H:i') }}</strong>
+                        <strong>{{ $feed->created_at->toDefaultDateTimeString() }}</strong>
                         <div class="text-gray-400">Date added</div>
                     </div>
                     <div class="text-center">
@@ -30,7 +30,7 @@
                         <div class="text-gray-400">Items</div>
                     </div>
                     <div class="text-center">
-                        <strong>{{ $feed->last_update?->timezone(\Illuminate\Support\Facades\Auth::user()->timezone)->format('d/m/y H:i') ?? 'Scheduled...' }}</strong>
+                        <strong>{{ $feed->last_update?->toDefaultDateTimeString() ?? 'Scheduled...' }}</strong>
 
                         <div class="text-gray-400">
                             Last Update
