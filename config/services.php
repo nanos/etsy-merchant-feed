@@ -39,5 +39,6 @@ return [
         'keyString' => env('ETSY_KEYSTRING', ''),
         'url' => 'https://api.etsy.com/v3/',
         'redirect_url' => env('REDIRECT_URL', ''),
+        'sharedSecret' => env('ETSY_SHARED_SECRET'),
     ]
 ];

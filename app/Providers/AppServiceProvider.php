@@ -18,6 +18,7 @@ class AppServiceProvider extends ServiceProvider
             return new EtsyService(
                 config('services.etsy.keyString'),
                 config('services.etsy.url'),
+                config('services.etsy.sharedSecret')
             );
         });
     }

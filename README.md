@@ -41,7 +41,7 @@ In order to use this tool, you need an Etsy API key. Etsy can take some time (se
 
 1. Go to [etsy.com/developers/register](https://www.etsy.com/developers/register) 
 2. Fill in the required details. As part of this, you'll need to provide a callback URL. This is `https://example.com/etsy/callback` (Replace `example.com` with your own domain).
-3. Take a note of your **KEYSTRING** (the **SHARED SECRET** is not required for this tool) 
+3. Take a note of your **KEYSTRING** and **SHARED SECRET**. 
 
 ## Install Etsy Merchant Feeds.
 
@@ -54,6 +54,7 @@ cp .env.example .env
 3. Open the `.env` file and adjust these values for your environment. You will need to provide at least the following configuration options (replace `https://example.com` with your own URL and `{YOUR_KEYSTRING}` with the KEYSTRING you received from Etsy) 
    - `APP_URL=https://example.com`
    - `ETSY_KEYSTRING={YOUR_KEYSTRING}`
+   - `ETSY_SHARED_SECRET={YOUR_SHARED_SECRET}`
 4. Run the following commands to install all requirements:
 ```bash
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader 

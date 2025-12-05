@@ -18,6 +18,7 @@ readonly class EtsyService
     public function __construct(
         private string $keyString,
         private string $baseUrl,
+        private string $sharedSecret,
     )
     {
     }
@@ -137,7 +138,7 @@ readonly class EtsyService
     {
         return Http
             ::withHeaders([
-                'x-api-key' => $this->keyString,
+                'x-api-key' => "$this->keyString:$this->sharedSecret",
                 'Authorization' => 'Bearer ' . $this->token['access_token'],
             ])
             ->get($this->baseUrl . 'application/' . $endpoint, $query)
